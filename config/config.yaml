@@ -1,0 +1,216 @@
+# Currency Carry Trade Strategy Configuration
+# This file contains all configurable parameters for the carry trade system
+
+# Data Configuration
+data:
+  # Date range for analysis
+  start_date: '2010-01-01'
+  end_date: '2023-12-31'
+  
+  # G10 Currency pairs (base currency is USD)
+  currency_pairs:
+    - 'EURUSD=X'  # Euro
+    - 'GBPUSD=X'  # British Pound
+    - 'AUDUSD=X'  # Australian Dollar
+    - 'NZDUSD=X'  # New Zealand Dollar
+    - 'USDCAD=X'  # Canadian Dollar
+    - 'USDCHF=X'  # Swiss Franc
+    - 'USDJPY=X'  # Japanese Yen
+    - 'USDSEK=X'  # Swedish Krona
+    - 'USDNOK=X'  # Norwegian Krone
+  
+  # Interest rate symbols (FRED database)
+  interest_rates:
+    USD: 'DFF'        # US Federal Funds Rate
+    EUR: 'IRSTCI01EZM156N'  # Euro area interest rate
+    GBP: 'IRSTCI01GBM156N'  # UK interest rate
+    JPY: 'IRSTCI01JPM156N'  # Japan interest rate
+    AUD: 'IRSTCI01AUM156N'  # Australia interest rate
+    NZD: 'IRSTCI01NZM156N'  # New Zealand interest rate
+    CAD: 'IRSTCI01CAM156N'  # Canada interest rate
+    CHF: 'IRSTCI01CHM156N'  # Switzerland interest rate
+    SEK: 'IRSTCI01SEM156N'  # Sweden interest rate
+    NOK: 'IRSTCI01NOM156N'  # Norway interest rate
+  
+  # Data sources
+  sources:
+    currency_data: 'yahoo'  # yahoo, alpha_vantage, quandl
+    interest_rates: 'fred'  # fred, oecd
+    trade_flows: 'oecd'    # oecd, worldbank, imf
+
+# Strategy Configuration
+strategy:
+  # Carry trade parameters
+  min_rate_differential: 0.5    # Minimum interest rate differential (percentage points)
+  momentum_window: 20           # Days for momentum calculation
+  volatility_window: 30         # Days for volatility calculation
+  
+  # Position sizing
+  max_position_size: 0.15       # Maximum position size as fraction of portfolio
+  min_position_size: 0.02       # Minimum position size as fraction of portfolio
+  
+  # Signal generation
+  signal_threshold: 0.1         # Minimum signal strength to generate trade
+  momentum_weight: 0.3          # Weight for momentum in signal calculation
+  carry_weight: 0.5             # Weight for carry in signal calculation
+  trade_flow_weight: 0.2        # Weight for trade flows in signal calculation
+  
+  # Filters
+  volatility_filter: true       # Apply volatility filter
+  max_volatility: 0.25          # Maximum allowed volatility for position
+  correlation_filter: true      # Apply correlation filter
+  max_correlation: 0.8          # Maximum correlation between positions
+
+# Risk Management Configuration
+risk_management:
+  # Portfolio risk limits
+  max_portfolio_risk: 0.15      # Maximum portfolio volatility
+  max_individual_weight: 0.2    # Maximum weight for individual currency
+  max_sector_weight: 0.4        # Maximum weight for currency sector (e.g., commodity currencies)
+  
+  # Risk metrics
+  var_confidence: 0.05          # VaR confidence level (5%)
+  var_window: 252               # Days for VaR calculation
+  max_drawdown_limit: 0.15      # Maximum allowed drawdown
+  
+  # Position sizing methods
+  position_sizing_method: 'risk_parity'  # risk_parity, equal_weight, optimal, kelly
+  rebalancing_frequency: 'daily'         # daily, weekly, monthly
+  
+  # Stop loss and take profit
+  use_stop_loss: true
+  stop_loss_pct: 0.05           # 5% stop loss
+  use_take_profit: true
+  take_profit_pct: 0.10         # 10% take profit
+
+# Transaction Costs Configuration
+transaction_costs:
+  # Trading costs
+  transaction_cost_bps: 2.0     # Transaction cost in basis points
+  funding_cost_bps: 1.0         # Funding cost in basis points
+  slippage_bps: 0.5             # Market impact/slippage in basis points
+  
+  # Cost model
+  cost_model: 'linear'          # linear, square_root, market_impact
+  min_trade_size: 10000         # Minimum trade size (USD)
+  
+  # Funding rates (for carry calculation)
+  funding_rates:
+    overnight_rate: 'SOFR'      # Overnight funding rate
+    term_structure: true        # Use term structure for funding
+
+# Backtesting Configuration
+backtesting:
+  # Capital and leverage
+  initial_capital: 1000000      # Starting capital (USD)
+  max_leverage: 3.0             # Maximum leverage allowed
+  margin_requirement: 0.02      # Margin requirement (2%)
+  
+  # Execution
+  execution_delay: 1            # Days delay for signal execution
+  partial_fills: true           # Allow partial order fills
+  market_hours_only: false      # Trade only during market hours
+  
+  # Rebalancing
+  rebalance_frequency: 'daily'  # daily, weekly, monthly
+  rebalance_threshold: 0.05     # Rebalance if weight deviates by 5%
+  
+  # Performance measurement
+  benchmark: 'USD'              # Benchmark currency
+  risk_free_rate: 'DFF'         # Risk-free rate for Sharpe calculation
+
+# Trade Flow Analysis Configuration
+trade_flows:
+  # Data sources and parameters
+  bilateral_trade_threshold: 1000000000  # Minimum bilateral trade (USD)
+  trade_intensity_window: 12             # Months for trade intensity calculation
+  
+  # Signal generation from trade flows
+  trade_flow_signal_window: 60           # Days for trade flow signal
+  trade_balance_weight: 0.6              # Weight for trade balance in signal
+  trade_intensity_weight: 0.4            # Weight for trade intensity in signal
+  
+  # Country groupings for analysis
+  country_groups:
+    commodity_exporters: ['AUD', 'NZD', 'CAD', 'NOK']
+    safe_havens: ['USD', 'CHF', 'JPY']
+    developed_europe: ['EUR', 'GBP', 'SEK']
+
+# Visualization and Reporting
+reporting:
+  # Output formats
+  generate_plots: true
+  plot_format: 'png'            # png, pdf, svg
+  generate_html_report: true
+  generate_pdf_report: false
+  
+  # Plot configurations
+  plot_style: 'seaborn'         # matplotlib, seaborn, plotly
+  figure_size: [12, 8]
+  dpi: 300
+  
+  # Performance metrics to include
+  metrics:
+    - 'total_return'
+    - 'annualized_return'
+    - 'volatility'
+    - 'sharpe_ratio'
+    - 'max_drawdown'
+    - 'calmar_ratio'
+    - 'sortino_ratio'
+    - 'var_95'
+    - 'expected_shortfall'
+    - 'win_rate'
+    - 'profit_factor'
+
+# Logging Configuration
+logging:
+  level: 'INFO'                 # DEBUG, INFO, WARNING, ERROR
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  file_logging: true
+  log_file: 'logs/carry_trade.log'
+  max_file_size: 10485760       # 10MB
+  backup_count: 5
+
+# API Configuration
+api:
+  # FRED API
+  fred_api_key: null            # Set via environment variable FRED_API_KEY
+  fred_base_url: 'https://api.stlouisfed.org/fred/series/observations'
+  
+  # Yahoo Finance
+  yahoo_timeout: 30
+  yahoo_retries: 3
+  
+  # OECD API
+  oecd_base_url: 'https://stats.oecd.org/restsdmx/sdmx.ashx/GetData'
+  oecd_timeout: 60
+  
+  # Rate limiting
+  rate_limit_calls: 100
+  rate_limit_period: 3600       # seconds
+
+# File Paths
+paths:
+  data_dir: 'data'
+  raw_data_dir: 'data/raw'
+  processed_data_dir: 'data/processed'
+  trade_flows_dir: 'data/trade_flows'
+  results_dir: 'results'
+  logs_dir: 'logs'
+  config_dir: 'config'
+  notebooks_dir: 'notebooks'
+  tests_dir: 'tests'
+
+# Development and Testing
+development:
+  debug_mode: false
+  use_sample_data: false        # Use sample data for testing
+  sample_data_size: 1000        # Number of samples for testing
+  parallel_processing: true
+  num_processes: 4              # Number of parallel processes
+  
+  # Testing parameters
+  test_start_date: '2020-01-01'
+  test_end_date: '2021-12-31'
+  monte_carlo_runs: 1000        # For Monte Carlo testing

@@ -1,0 +1,29 @@
+
+=== CURRENCY CARRY TRADE BACKTEST RESULTS ===
+
+Backtest Period: 2010-01-01 00:00:00 to 2023-12-29 00:00:00
+Initial Capital: $1,000,000.00
+
+--- PERFORMANCE METRICS ---
+Total Return: -74.80%
+Annualized Return: -9.38%
+Volatility: 8869.92%
+Sharpe Ratio: -0.00
+Sortino Ratio: -0.02
+
+--- RISK METRICS ---
+Maximum Drawdown: -179.16%
+95% VaR (Daily): -14.28%
+Expected Shortfall: -63.22%
+
+--- TRADING STATISTICS ---
+Total Trades: 450
+Win Rate: 21.3%
+Profit Factor: 2.09
+Average Trade Duration: 22.7 days
+Total Transaction Costs: $63,727.61
+
+--- FINAL PORTFOLIO VALUE ---
+Final Value: $252,018.32
+Total P&L: $-747,981.68
+        
